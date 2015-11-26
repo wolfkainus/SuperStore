@@ -1,0 +1,123 @@
+<h2 class="display-4 m-t-md m-b-md">Perfil</h2>
+<div class="row">
+
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: 'col-md-5' }) do |f| %>
+  <%= devise_error_messages! %>
+
+  <div class="form-group">
+    <%= f.label :name %><br />
+    <%= f.text_field :name, autofocus: true, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :lastname %><br />
+    <%= f.text_field :lastname, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :username %><br />
+    <%= f.text_field :username, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :address %><br />
+    <%= f.text_field :address, class: 'form-control js-address' %>
+    <button class="btn btn-primary js-getlocation">GetLocation</button>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :latitude %><br />
+    <%= f.text_field :latitude, class: 'form-control js-latitude' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :longitude %><br />
+    <%= f.text_field :longitude, class: 'form-control js-longitude' %>
+  </div>
+
+  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+  <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
+    <%= f.password_field :password, autocomplete: "off", class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "off", class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
+    <%= f.password_field :current_password, autocomplete: "off", class: 'form-control' %>
+  </div>
+
+  <div class="actions">
+    <%= f.button class: 'btn btn-primary' do %>
+    Guardar
+    <span class="glyphicon glyphicon-saved"></span>
+    <% end %>
+  </div>
+  <% end %>
+
+  <div class="col-md-6 col-md-offset-1">
+    <h3>Ordenes</h3>
+    <table class="table table-striped">
+      <thead class="thead-inverse">
+        <tr>
+          <th class="text-center">#</th>
+          <th>Estado</th>
+          <th>Total</th>
+          <th colspan="2"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% unless current_user.orders.pending.empty? %>
+          <% current_user.orders.pending.each do |order| %>
+            <tr>
+              <th scope="row" class="text-center"><%= order.id %></th>
+              <td>Pendiente</td>
+              <td><%= number_to_currency order.product_orders.total %></td>
+              <td><%= link_to 'Pagar', paid_order_path(order), method: :post, class: 'btn btn-success' %></td>
+              <td><%= link_to 'Cancelar', cancel_order_path(order), method: :delete, class: 'btn btn-danger' %></td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <th colspan="4" class="text-center">No tienes ordenes pendientes</th>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h3>Eliminar mi cuenta</h3>
+
+    <p>
+      <%= button_to registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete, class: 'btn btn-danger' do %>
+      Eliminar cuenta
+      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+      <% end %>
+    </p>
+
+    <%= link_to :back, class: 'btn btn-info' do %>
+    Volver
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <% end %>
+
+    <!-- map -->
+
+    <div id="map" class="gmap m-t-md"></div>
+
+    <!-- /map -->
+  </div>
+
+</div>
